@@ -1,0 +1,35 @@
+{% load rest_framework %}
+{% block body %}
+
+<html>
+<head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+</head>
+<body>
+ 
+<h1>Kitaplar</h1>
+
+<ul>
+    {% for kitap in queryset %}
+    <li>{{ kitap.title }}</li>
+    <li>{{ kitap.total_pages }}</li>
+    <li>{{ kitap.rating }}</li>
+    <li>{{ kitap.isbn }}</li>
+    <li>{{ kitap.published_date }}</li>
+    {% endfor %}
+</ul>
+
+<form class="form-horizontal" action="{% url 'Books:kitaplar' %}" method="post" novalidate>
+    {% csrf_token %}
+    {% render_form serializer %}
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default">Sign in</button>
+        </div>
+    </div>
+</form>
+
+
+</body></html>
+
+{% endblock body %}
