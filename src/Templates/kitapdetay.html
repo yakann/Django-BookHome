@@ -1,0 +1,20 @@
+{% load rest_framework %}
+{% block body %}
+
+<html>
+<head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+</head>
+<body>
+ 
+<h1>Profile - {{ queryset.name }}</h1>
+
+<form action="{% url 'Books:kitap-detay' id=queryset.id %}" method="POST">
+    {% csrf_token %}
+    {% render_form serializer %}
+    <input type="submit" value="Save">
+</form>
+
+</body></html>
+
+{% endblock body %}

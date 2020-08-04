@@ -19,7 +19,7 @@
     {% endfor %}
 </ul>
 
-<form class="form-horizontal" action="{% url 'Books:kitaplar' %}" method="post" novalidate>
+{% comment %} <form class="form-horizontal" action="{% url 'Books:kitaplar' %}" method="post" novalidate>
     {% csrf_token %}
     {% render_form serializer %}
     <div class="form-group">
@@ -27,8 +27,7 @@
             <button type="submit" class="btn btn-default">Sign in</button>
         </div>
     </div>
-</form>
-
+</form> {% endcomment %}
 
 </body></html>
 

@@ -3,18 +3,29 @@ from rest_framework import serializers
 from . import models
 
 class BookSerializers(serializers.Serializer):
-
-    email = serializers.EmailField()
-    content = serializers.CharField(max_length=200)
-    created = serializers.DateTimeField()
+    id = serializers.IntegerField(read_only=True)
+    title = serializers.CharField(required=True, allow_blank=True, max_length=255)
+    total_pages = serializers.IntegerField(required=True, max_value=5000)
+    rating = serializers.DecimalField(required=False, decimal_places=2, max_digits=5)
+    isbn = serializers.CharField(required=True, max_length=13)
+    published_date = serializers.DateField(style={'base_template': 'input.html', 'input_type':'date'})
 
     def create(self, validated_data):
-        return Comment(**validated_data)
+        """
+        Create and return a new `Snippet` instance, given the validated data.
+        """
+        return Snippet.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
-        instance.email = validated_data.get('email', instance.email)
-        instance.content = validated_data.get('content', instance.content)
-        instance.created = validated_data.get('created', instance.created)
+        """
+        Update and return an existing `Snippet` instance, given the validated data.
+        """
+        instance.title = validated_data.get('title', instance.title)
+        instance.total_pages = validated_data.get('total_pages', instance.total_pages)
+        instance.rating = validated_data.get('rating', instance.rating)
+        instance.isbn = validated_data.get('isbn', instance.isbn)
+        instance.published_date = validated_data.get('published_date', instance.published_date)
+        instance.save()
         return instance
 
     # title = serializers.CharField(
