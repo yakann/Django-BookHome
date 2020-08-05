@@ -11,14 +11,22 @@
 
 <ul>
     {% for kitap in queryset %}
-    <li>{{ kitap.title }}</li>
+    <a href="{% url 'Books:kitap-detay' id=kitap.id %}"><li>{{ kitap.title }}</li></a>
     <li>{{ kitap.total_pages }}</li>
     <li>{{ kitap.rating }}</li>
     <li>{{ kitap.isbn }}</li>
     <li>{{ kitap.published_date }}</li>
     {% endfor %}
 </ul>
+<form action="" method="POST">
+    {% csrf_token %}
+    {% render_form serializer %}
+    <input type="submit" value="Save">
+</form>
 
+<a href="{% url 'Books:kitaplar' %}" class="btn btn-info btn-md" value='islem'>
+    <i class="fas fa-close">|||</i>&nbsp;Kitap Ekle
+</a>
 {% comment %} <form class="form-horizontal" action="{% url 'Books:kitaplar' %}" method="post" novalidate>
     {% csrf_token %}
     {% render_form serializer %}

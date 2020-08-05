@@ -12,15 +12,15 @@ class KitapListesi(APIView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'kitaplarlistesi.html'
     def get(self, request):
-            queryset = Books.objects.all()
-            serializer = BookSerializers(queryset, many=True)
-            return Response({'serializer':serializer, 'queryset':queryset})
+        queryset = Books.objects.all()
+        serializer = BookSerializers(queryset)
+        return Response({'serializer':serializer, 'queryset':queryset})
     def post(self, request):
-            serializer = BookSerializers(data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer = BookSerializers(data=request.data)
+        if not serializer.is_valid():
+            return Response({'serializer': serializer})
+        serializer.save()
+        return redirect('Books:kitaplar')
 
 class KitapDetay(APIView):
     renderer_classes = [TemplateHTMLRenderer]
