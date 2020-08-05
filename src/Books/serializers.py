@@ -19,7 +19,9 @@ class BookSerializers(serializers.Serializer):
         """
         Create and return a new `Snippet` instance, given the validated data.
         """
-        
+        validated_data.get('publisher_id', models.Publishers.objects.filter(name=self.publisher_id).values_list('id', flat=True))
+        # validated_data.author_id = models.Authors.objects.filter(name=validated_data.author_id).values_list('id', flat=True)
+        # validated_data.genre_id = models.Genres.objects.filter(name=validated_data.genre_id).values_list('id', flat=True)
         
         return models.Books.objects.create(**validated_data)
 
@@ -32,32 +34,21 @@ class BookSerializers(serializers.Serializer):
         instance.rating = validated_data.get('rating', instance.rating)
         instance.isbn = validated_data.get('isbn', instance.isbn)
         instance.published_date = validated_data.get('published_date', instance.published_date)
-        publisher_id = validated_data.get('publisher_id', instance.publisher_id)
+        publisher_id = validated_data.get('publisher_id', models.Publishers.objects.filter(name=self.publisher_id).values_list('id', flat=True))
         author_id = validated_data.get('author_id', instance.author_id)
         genre_id = validated_data.get('genre_id', instance.genre_id)
         instance.save()
         return instance
 
 
-    # title = serializers.CharField(
-    #     max_length=100,
-    #     style={'placeholder': 'text', 'autofocus': True}
-    # )
-    # total_pages = serializers.CharField(
-    #     max_length=100,
-    #     style={'input_type': 'number', 'placeholder': 'Password'}
-    # )
-    # rating = serializers.CharField(
-    #     max_length=5,
-    #     style={'input_type': 'number'}
-    # )
-    # isbn = serializers.CharField(
-    #     max_length=13,
-    #     style={'input_type': 'text'}
-    # )
-    # published_date = serializers.CharField(
-    #     style={'input_type': 'date'}
-    # )
+##############ÇALIŞAN KOD ALT KISIM####################
+#id nin isimle çekilmesi
+
+
+# class BookSerializers(serializers.ModelSerializer):
+#     class Meta:
+#         model = models.Books
+#         fields = '__all__'
 
 class PublisherSerializers(serializers.ModelSerializer):
     class Meta:

@@ -31,14 +31,14 @@ class Books(models.Model):
     class Meta:
         db_table = 'Books'
     id = models.AutoField(primary_key=True, unique=True)
-    title = models.CharField(max_length=255, blank=False, null=False)
-    total_pages = models.IntegerField(blank=False, null=True)
-    rating = models.DecimalField(blank=False, null=True, decimal_places=2, max_digits=5)
-    isbn = models.CharField(max_length=13, blank=False, null=True)
-    published_date = models.DateField(blank=False, null=True)
-    publisher_id = models.ForeignKey(Publishers, on_delete=models.CASCADE)
-    author_id = models.ForeignKey(Authors, on_delete=models.CASCADE)
-    genre_id = models.ForeignKey(Genres, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255, blank=False, null=False, default=None)
+    total_pages = models.IntegerField(blank=False, null=True, default=None)
+    rating = models.DecimalField(blank=False, null=True, decimal_places=2, max_digits=5, default=None)
+    isbn = models.CharField(max_length=13, blank=False, null=True, default=None)
+    published_date = models.DateField(blank=False, null=True, default=None)
+    publisher_id = models.ForeignKey(Publishers, on_delete=models.CASCADE, default=None)
+    author_id = models.ForeignKey(Authors, on_delete=models.CASCADE, default=None)
+    genre_id = models.ForeignKey(Genres, on_delete=models.CASCADE, default=None)
 
 # class Book_Authors(models.Model):
     
