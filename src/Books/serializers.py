@@ -19,11 +19,15 @@ class BookSerializers(serializers.Serializer):
         """
         Create and return a new `Snippet` instance, given the validated data.
         """
-        validated_data.get('publisher_id', models.Publishers.objects.filter(name=self.publisher_id).values_list('id', flat=True))
-        # validated_data.author_id = models.Authors.objects.filter(name=validated_data.author_id).values_list('id', flat=True)
-        # validated_data.genre_id = models.Genres.objects.filter(name=validated_data.genre_id).values_list('id', flat=True)
-        
-        return models.Books.objects.create(**validated_data)
+        publisher_v = validated_data.pop('publisher_id')
+        author_v = validated_data.pop('author_id')
+        genre_v = validated_data.pop('genre_id')
+
+        publisher_id =  models.Publishers.objects.filter(name=str(publisher_v)).first()
+        author_id =  models.Authors.objects.filter(first_name=str(author_v)).first()
+        genre_id =  models.Genres.objects.filter(genre=str(genre_v)).first()
+
+        return models.Books.objects.create(publisher_id=publisher_id, author_id=author_id, genre_id=genre_id, **validated_data)
 
     def update(self, instance, validated_data):
         """
@@ -34,9 +38,9 @@ class BookSerializers(serializers.Serializer):
         instance.rating = validated_data.get('rating', instance.rating)
         instance.isbn = validated_data.get('isbn', instance.isbn)
         instance.published_date = validated_data.get('published_date', instance.published_date)
-        publisher_id = validated_data.get('publisher_id', models.Publishers.objects.filter(name=self.publisher_id).values_list('id', flat=True))
-        author_id = validated_data.get('author_id', instance.author_id)
-        genre_id = validated_data.get('genre_id', instance.genre_id)
+        instance.publisher_id = validated_data.get('publisher_id', models.Publishers.objects.filter(name=self.publisher_id).values_list('id', flat=True))
+        instance.author_id = validated_data.get('author_id', instance.author_id)
+        instance.genre_id = validated_data.get('genre_id', instance.genre_id)
         instance.save()
         return instance
 
@@ -45,7 +49,7 @@ class BookSerializers(serializers.Serializer):
 #id nin isimle çekilmesi
 
 
-# class BookSerializers(serializers.ModelSerializer):
+# class BookSerializers(serializers.HyperlinkedModelSerializer):
 #     class Meta:
 #         model = models.Books
 #         fields = '__all__'
