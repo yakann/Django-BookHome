@@ -4,7 +4,7 @@ from . import models
 
 
 class BookSerializers(serializers.Serializer):
-
+    #Books
     id = serializers.IntegerField(read_only=True)
     title = serializers.CharField(allow_blank=True, max_length=255, default=None)
     total_pages = serializers.IntegerField(default=None, max_value=5000)
@@ -14,18 +14,34 @@ class BookSerializers(serializers.Serializer):
     publisher_id = serializers.ChoiceField(choices=models.Publishers.objects.all().values_list('name', flat=True), default=None)
     author_id = serializers.ChoiceField(choices=models.Authors.objects.all().values_list('first_name', flat=True), default=None)
     genre_id = serializers.ChoiceField(choices=models.Genres.objects.all().values_list('genre', flat=True), default=None)
+    #Publisher
+    publisher_name = serializers.CharField(allow_blank=True, max_length=255, default=None, required=False)
+    #Author
+    first_name = serializers.CharField(allow_blank=True, max_length=100, default=None, required=False)
+    middle_name = serializers.CharField(allow_blank=True, max_length=50, default=None, required=False)
+    last_name = serializers.CharField(allow_blank=True, max_length=100, default=None, required=False)
 
     def create(self, validated_data):
         """
         Create and return a new `Snippet` instance, given the validated data.
         """
+        author_first_name = validated_data.pop('first_name')
+        author_middle_name = validated_data.pop('middle_name')
+        author_last_name = validated_data.pop('last_name')
+        validated_data.pop('publisher_name')#geçici olarak
+
         publisher_v = validated_data.pop('publisher_id')
         author_v = validated_data.pop('author_id')
         genre_v = validated_data.pop('genre_id')
-
+        
         publisher_id =  models.Publishers.objects.filter(name=str(publisher_v)).first()
         author_id =  models.Authors.objects.filter(first_name=str(author_v)).first()
         genre_id =  models.Genres.objects.filter(genre=str(genre_v)).first()
+
+        if author_first_name:
+            new_author = models.Authors(first_name=author_first_name, middle_name=author_middle_name, last_name=author_last_name)
+            new_author.save()
+            author_id = new_author
 
         return models.Books.objects.create(publisher_id=publisher_id, author_id=author_id, genre_id=genre_id, **validated_data)
 

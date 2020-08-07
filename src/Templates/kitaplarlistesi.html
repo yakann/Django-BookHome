@@ -1,42 +1,118 @@
 {% load rest_framework %}
 {% block body %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<html>
-<head>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-</head>
-<body>
- 
-<h1>Kitaplar</h1>
-
-<ul>
-    {% for kitap in queryset %}
-    <a href="{% url 'Books:kitap-detay' id=kitap.id %}"><li>{{ kitap.title }}</li></a>
-    <li>{{ kitap.total_pages }}</li>
-    <li>{{ kitap.rating }}</li>
-    <li>{{ kitap.isbn }}</li>
-    <li>{{ kitap.published_date }}</li>
-    {% endfor %}
-</ul>
-<form action="" method="POST">
-    {% csrf_token %}
-    {% render_form serializer %}
-    <input type="submit" value="Save">
-</form>
-
-<a href="{% url 'Books:kitaplar' %}" class="btn btn-info btn-md" value='islem'>
-    <i class="fas fa-close">|||</i>&nbsp;Kitap Ekle
-</a>
-{% comment %} <form class="form-horizontal" action="{% url 'Books:kitaplar' %}" method="post" novalidate>
-    {% csrf_token %}
-    {% render_form serializer %}
-    <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-default">Sign in</button>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css" integrity="sha384-VCmXjywReHh4PwowAiWNagnWcLhlEJLA5buUprzK8rxFgeH0kww/aWY76TfkUoSX" crossorigin="anonymous">
+    
+    <title>Hello, world!</title>
+  </head>
+  <body>
+    <div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Kitaplar</h1>
         </div>
     </div>
-</form> {% endcomment %}
+    <div class="row">
+        <div class="col-md-4">
+            <ul>
+            {% for kitap in queryset %}
+                <a href="{% url 'Books:kitap-detay' id=kitap.id %}"><li>{{ kitap.title }}</li></a>
+                {% comment %} <li>{{ kitap.total_pages }}</li>
+                <li>{{ kitap.rating }}</li>
+                <li>{{ kitap.isbn }}</li>
+                <li>{{ kitap.published_date }}</li> {% endcomment %}
+            {% endfor %}
+            </ul>
+        </div>
+        <div class="col-md-4">
+            <h3>ALAN2</h3>
+        </div>
+        <div class="col-md-4">
+            <h3>ALAN3</h3>
+        </div>
+    </div>
+    </div>
+    <div class="container">
+    <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo">Yeni Kitap Ekle</button>
+    <div class="collapse" id="demo">
+    <form action="" method="POST">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-md-8">
+        {% render_field serializer.title style=style%}
+        </div>
+        <div class="col-md-4">
+            <div class="row">
+                <div class="col-md-7">
+                    {% render_field serializer.author_id style=style%}
+                </div>
+                <div class="col-md-5">
+                    <button type="button" class="btn btn-outline-dark" data-toggle="collapse" data-target="#demo2" style="margin-top: 31px;">Yeni Yazar Ekle</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="collapse card border-secondary mb-3" id="demo2">
+    <div class="card-header">Yeni Yazar Bilgileri</div>
+    <div class="card-body text-secondary">
+    <h5 class="card-title">Secondary card title</h5>
+    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    </div>
+    <div class="container">
+    <div class="row">
+        <div class="col-md-12">{% render_field serializer.first_name style=style%}</div>
+        <div class="col-md-12">{% render_field serializer.middle_name style=style%}</div>
+        <div class="col-md-12">{% render_field serializer.last_name style=style%}</div>
+    </div>
+    </div>
+    </div>
 
-</body></html>
+    <div class="row">
+        <div class="col-md-4">
+        {% render_field serializer.isbn style=style%}
+        </div>
+        <div class="col-md-4">
+        {% render_field serializer.total_pages style=style%}
+        </div>
+        <div class="col-md-4">
+        {% render_field serializer.genre_id style=style%}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-5">
+        {% render_field serializer.publisher_id style=style%}
+        </div>
+        <div class="col-md-5">
+        {% render_field serializer.published_date style=style%}
+        </div>
+        <div class="col-md-2">
+        {% render_field serializer.rating style=style%}
+        </div>
+    </div>
+    
+        <button type="submit" class="btn btn-outline-warning" value="Save">KAYDET</button>
+        {% comment %} <a href="{% url 'Books:kitaplar' %}" class="btn btn-info btn-md" type="submit" value='Save'>
+            <i class="fas fa-close">|||</i>&nbsp;Kitap Ekle
+        </a> {% endcomment %}
+        {% comment %} <input type="submit" value="Save"> {% endcomment %}
+    </form>
+    </div>
+    </div>
+    
+    
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/js/bootstrap.min.js" integrity="sha384-XEerZL0cuoUbHE4nZReLT7nx9gQrQreJekYhJD9WNWhH8nEW+0c5qq7aIo2Wl30J" crossorigin="anonymous"></script>
+  </body>
+</html>
 
 {% endblock body %}

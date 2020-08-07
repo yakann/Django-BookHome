@@ -11,14 +11,16 @@ from rest_framework.renderers import TemplateHTMLRenderer
 class KitapListesi(APIView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'kitaplarlistesi.html'
+    style = {'template_pack': 'rest_framework/vertical/'}
+
     def get(self, request):
         queryset = Books.objects.all()
         serializer = BookSerializers(queryset)
-        return Response({'serializer':serializer, 'queryset':queryset})
+        return Response({'serializer':serializer, 'queryset':queryset, 'style': self.style})
     def post(self, request):
         serializer = BookSerializers(data=request.data)
         if not serializer.is_valid():
-            return Response({'serializer': serializer})
+            return Response({'serializer': serializer, 'style': self.style})
         serializer.save()
         return redirect('Books:kitaplar')
 
