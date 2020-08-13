@@ -65,7 +65,7 @@ class BookSerializers(serializers.Serializer):
 #id nin isimle çekilmesi
 
 
-# class BookSerializers(serializers.HyperlinkedModelSerializer):
+# class BookSerializers2(serializers.HyperlinkedModelSerializer):
 #     class Meta:
 #         model = models.Books
 #         fields = '__all__'

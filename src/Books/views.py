@@ -2,16 +2,19 @@ from django.shortcuts import render, redirect
 from .serializers import BookSerializers
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, generics, mixins
 from .models import Books
 from django.shortcuts import get_object_or_404
 from rest_framework.renderers import TemplateHTMLRenderer
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
 # Create your views here.
 
 class KitapListesi(APIView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'kitaplarlistesi.html'
     style = {'template_pack': 'rest_framework/vertical/'}
+
 
     def get(self, request):
         queryset = Books.objects.all()
@@ -60,3 +63,30 @@ class KitapDetay(APIView):
         cari = self.get_object(id)
         cari.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class GenericBooksList(generics.GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.RetrieveModelMixin, mixins.DestroyModelMixin):
+    serializer_class = BookSerializers
+    queryset = Books.objects.all()
+    lookup_field = 'id'
+
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'kitaplarlistesi2.html'
+    style = {'template_pack': 'rest_framework/vertical/'}
+    
+    #authentication_classes=[SessionAuthentication, BasicAuthentication]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, id=None):
+        if id:
+            return self.retrieve(request)
+        return self.list(request)
+    
+    def post(self, request, id=None):
+        return self.create(request)
+    
+    def put(self, request, id=None):
+        return self.update(request, id)
+
+    def delete(self, request, id):
+        return self.destroy(request, id)
